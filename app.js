@@ -24,8 +24,11 @@ app.get('/', (req, res) => {
     Visitor.create({ name: name, count: count }, function(err) {
       if (err) return console.error(err);
     });
+  } else {
+    Visitor.updateOne({ name: name}, { count: count + 1 } );
   }
-  Visitor.updateOne({ name: name}, { count: count + 1 } );
+  // definir un condicional que busque en la base de datos si ya existe el objeto
+  // if (Visitor.countDocuments({ name: name }) > 0) { }
   Visitor.find(function(err, visitors){
     const visitorCount = [];
     visitors.forEach(function(visitor){
