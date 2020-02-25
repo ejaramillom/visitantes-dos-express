@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title  Visitantes
+  body
+    #hello-form
+    table
+      tr
+        th Id
+        th Name
+        th Visits
+      each val in visitorCount
+        tr
+          td= val.id
+          td= val.name
+          td= val.count
