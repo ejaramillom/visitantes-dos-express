@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/mydb', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/dbone', { useNewUrlParser: true });
 mongoose.connection.on("error", function(e) { console.error(e); });
 // definimos el schema
 const schema = new mongoose.Schema({
@@ -18,19 +18,30 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
   let name = req.query.name;
+  let count = 1;
+  let existVisitor = Visitor.countDocuments({ name: name }, function(err, value) {
+    if (err) return handleError(err);
+    console.log("Hay " + value + " " + name);
+  });
+
   if (!name || name.length === 0) {
     name = "Anónimo";
     count = 1;
     Visitor.create({ name: name, count: count }, function(err) {
       if (err) return console.error(err);
     });
-  } else {
-    Visitor.updateOne({ name: name}, { count: count + 1 } );
+  } else if (name.length > 0) {
+    Visitor.create({ name: name, count: count }, function(err) {
+      if (err) return console.error(err);
+    });
+  } else if (existVisitor > 0) {
+    Visitor.count += 1;
+    // this doesnt work but for the sake of testing
+    Visitor.updateOne({ name: name}, { count: count } );
   }
-  // definir un condicional que busque en la base de datos si ya existe el objeto
-  // if (Visitor.countDocuments({ name: name }) > 0) { }
+
   Visitor.find(function(err, visitors){
-    const visitorCount = [];
+    let visitorCount = [];
     visitors.forEach(function(visitor){
       visitorCount.push(visitor);
     });
@@ -42,3 +53,4 @@ app.get('/', (req, res) => {
 });
 
 app.listen(3000, () => console.log('Listening on port 3000!'));
+
