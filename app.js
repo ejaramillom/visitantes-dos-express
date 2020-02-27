@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
-mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/dbtwo', { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/mongo-1', { useNewUrlParser: true });
 mongoose.connection.on("error", function(e) { console.error(e); });
 // definimos el schema
 const schema = new mongoose.Schema({
@@ -17,7 +17,7 @@ app.set('view engine', 'pug');
 app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
-  let name = req.query.nombre;
+  let name = req.query.name;
   let count = 1;
   let existVisitor = Visitor.findOne({ "name": name }, function(err, value) {
     if (err) return console.error(err);
