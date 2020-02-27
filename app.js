@@ -17,9 +17,9 @@ app.set('view engine', 'pug');
 app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
-  let name = req.query.name;
+  let name = req.query.nombre;
   let count = 1;
-  let existVisitor = Visitor.findOne({ name: name }, function(err, value) {
+  let existVisitor = Visitor.findOne({ "name": name }, function(err, value) {
     if (err) return console.error(err);
     console.log( "El visitante " + value + " existe" );
   });
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
     Visitor.create({ name: name, count: count }, function(err) {
       if (err) return console.error(err);
     });
-  } else if ( Visitor.findOne({ name: name }) != null ) {
+  } else if ( Visitor.findOne({ "name": name }) != null ) {
     Visitor.findOne({ name: name}, function(err, article) {
       if (err) return console.error(err);
       console.log(article.count);
