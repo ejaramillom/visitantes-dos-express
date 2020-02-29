@@ -19,43 +19,39 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
   let name = req.query.name;
   let count = 1;
-  let existVisitor = Visitor.findOne({ "name": name }, function(err, value) {
-    if (err) return console.error(err);
-    console.log( "El visitante " + value + " existe" );
+  let existVisitor = [];
+
+  Visitor.findOne({ name: name }, function( err, value ) {
+    if (err) return console.error( err );
+    existVisitor.push( name );
+
+      if (!name || name.length === 0) {
+        name = "Anónimo";
+        Visitor.create({ name: name, count: count }, function( err ) {
+          if (err) return console.error( err );
+        });
+      } else if ( value == null )  {
+        Visitor.create({ name: name, count: count }, function( err ) {
+          if (err) return console.error( err );
+        });
+      }
+      else {
+        value.count = value.count + 1;
+        value.save(function(err) {
+          if (err) return console.error(err);
+        });
+      }
   });
 
-  if (!name || name.length === 0) {
-    name = "Anónimo";
-    Visitor.create({ name: name, count: count }, function(err) {
-      if (err) return console.error(err);
-    });
-  } else if ( Visitor.findOne({ "name": name }) != null ) {
-    Visitor.findOne({ name: name}, function(err, article) {
-      if (err) return console.error(err);
-      console.log(article.count);
-      article.count = article.count + 1;
-      article.save(function(err) {
-        if (err) return console.error(err);
-      });
-    });
-  } else {
-    Visitor.create({ name: name, count: count }, function(err) {
-      if (err) return console.error(err);
-    });
-  }
-
-  Visitor.find( function(err, visitors){
+  Visitor.find(function(err, visitors){
     let visitorCount = [];
-    visitors.forEach( function(visitor){
+    visitors.forEach(function(visitor){
       visitorCount.push(visitor);
     });
-    console.log( visitorCount );
-    res.render( 'visitorTable', {
+    res.render('visitorTable', {
      visitorCount: visitorCount
     });
   });
 });
 
 app.listen(3000, () => console.log('Listening on port 3000!'));
-
-
