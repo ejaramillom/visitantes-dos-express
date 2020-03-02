@@ -10,9 +10,8 @@ html
           th Name
           th Visits
       tbody
-        tr
-          each val in visitorCount
-            tr
-              td= val.id
-              td= val.name
-              td= val.count
+        each val in visitorCount
+          tr
+            td= val.id
+            td= val.name
+            td= val.count
