@@ -3,15 +3,15 @@ html
   head
     title  Visitantes
   body
-    #hello-form
     table
-      thead tr
+      thead
+        tr
           th Id
           th Name
           th Visits
       tbody
-        each val in visitorCount
-          tr
+        tr
+          each val in visitorCount
             td= val.id
             td= val.name
             td= val.count
