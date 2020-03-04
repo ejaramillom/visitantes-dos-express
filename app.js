@@ -22,13 +22,13 @@ app.get( "/", async ( req, res ) => {
 
   if (!name || name.length === 0) {
     visitor = new Visitor({ name: "Anónimo", count: 1 });
-    visitor.save();
+    await visitor.save();
   } else if ( value == null )  {
     visitor = new Visitor({ name: name, count: 1 });
-    visitor.save();
+    await visitor.save();
   } else {
     value.count = value.count + 1;
-    value.save();
+    await value.save();
   }
   
   let visitorCount = await Visitor.find();
