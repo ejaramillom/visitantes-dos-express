@@ -3,7 +3,7 @@ const mongoose = require( "mongoose" );
 const bodyParser = require( "body-parser" );
 const app = express();
 
-mongoose.connect( process.env.MONGODB_URL || "mongodb://localhost:27017/mongo-1", { useNewUrlParser: true });
+mongoose.connect( process.env.MONGODB_URL || "mongodb://localhost:27017/dataone", { useNewUrlParser: true });
 mongoose.connection.on( "error", function(e) { console.error(e); });
 // definimos el schema
 const schema = new mongoose.Schema({
@@ -30,18 +30,13 @@ app.get( "/", async ( req, res ) => {
     value.count = value.count + 1;
     value.save();
   }
+  
+  let visitorCount = await Visitor.find();
 
-  Visitor.find(function(err, visitors){
-    let visitorCount = [];
-    visitors.forEach(function(visitor){
-      visitorCount.push(visitor);
-    });
-    res.render("visitorTable", {
-     visitorCount: visitorCount
-    });
-    console.log(visitorCount);
+  res.render( "visitorTable", {
+   visitorCount: visitorCount
   });
 
 });
 
-app.listen(3000, () => console.log("Listening on port 3000!"));
+app.listen(3000, () => console.log( "Listening on port 3000!" ));
