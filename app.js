@@ -3,7 +3,7 @@ const mongoose = require( "mongoose" );
 const bodyParser = require( "body-parser" );
 const app = express();
 
-mongoose.connect( process.env.MONGODB_URL || "mongodb://localhost:27017/dataone", { useNewUrlParser: true });
+mongoose.connect( process.env.MONGODB_URL || "mongodb://localhost:27017/mongo-1", { useNewUrlParser: true });
 mongoose.connection.on( "error", function(e) { console.error(e); });
 // definimos el schema
 const schema = new mongoose.Schema({
